@@ -1,65 +1,18 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var compress = require('compression');
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-var session = require('express-session');
-var config = require('./config');
-var mongoose = require('./controllers/mongoose');
-var passport = require('passport');
-//var userController = require('./controllers/users.server.controller');
-
-var app = express();
-var db = mongoose();
-var passport = passport();
-
-
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
-
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-// uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-console.log(process.env.NODE_ENV);
-if (process.env.NODE_ENV === 'production') {
-  app.use(compress());
-} else if (process.env.NODE_ENV === 'development') {
-  app.use(logger('dev'));
-}
-app.use(bodyParser.json());
-app.use(methodOverride());
-app.use(session({
-  saveUninitialized: true,
-  resave: true,
-  secret: config.sessionSecret
-}));
 
-app.use('/', routes);
-app.use('/users', users);
-//app.param('userId', userController.userByID);
+// Load the module dependencies
+var mongoose = require('./config/mongoose');
+var	express = require('./config/express');
+var	passport = require('./config/passport');
 
+// Create a new Mongoose connection instance
+var db = mongoose();
 
+// Create a new Express application instance
+var app = express();
+
+// Configure the Passport middleware
+var passport = passport();
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
