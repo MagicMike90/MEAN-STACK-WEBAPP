@@ -43,7 +43,7 @@ module.exports = function() {
 
   // Set the application view engine and 'views' folder
   app.set('views', './app/views');
-  app.set('view engine', 'jade');
+  app.set('view engine', 'ejs');
 
   // Configure the flash messages middleware
   app.use(flash());
@@ -54,9 +54,9 @@ module.exports = function() {
 
   // Load the routing files∫
   var routes = require('../app/routes/index.js');
-  var users = require('../app/routes/users.js');
+//  var users = require('../app/routes/users.js');
   app.use('/', routes)
-  app.use('/users', users)
+//  app.use('/users', users)
 
   // Configure static file serving
   app.use(express.static('./public'));
