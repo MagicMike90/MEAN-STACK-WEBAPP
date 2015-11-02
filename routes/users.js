@@ -1,72 +1,36 @@
 var express = require('express');
 var fs = require("fs");
 var path = require('path');
-
+var userController = require('../controllers/users.server.controller');
+var	passport = require('passport');
 var router = express.Router();
 
-var user = {
-  "user4": {
-    "name": "mohit",
-    "password": "password4",
-    "profession": "teacher",
-    "id": 4
-  }
-}
-var users = require('../controllers/users.server.controller');
 
-/* GET users listing. */
+
+/* GET userController listing. */
 router.get('/', function(req, res, next) {
-  //res.send('respond with a resource');
-  //  res.send(path.join(__dirname,'users.json'));
-  //console.log(path.join(__dirname,'helloworld.txt'));
-
-  fs.readFile(path.join(__dirname, 'users.json'), 'utf8', function(err, data) {
-    console.log(data);
-    res.send(data);
-  });
+  userController.list(req, res, next);
+  //res.end(userController.list);
+});
+router.post('/', function(req, res, next) {
+  userController.create(req, res, next);
 });
 
-router.post('/create', function(req, res, next) {
-  console.log("post");
-  //var data = JSON.parse(req);
-  //console.log(req);
-    res.send('POST request to homepage');
-  //res.send("users.create");
+
+// Set up the 'userController' parameterized routes
+router.get('/:userId', function(req, res) {
+  userController.read(req, res);
+  //res.send("update");
+})
+router.put('/:userId', function(req, res) {
+  userController.update(req, res);
+  //res.send("read");
+})
+router.delete('/:userId', function(req, res) {
+  userController.delete(req, res);
+//  res.send("delete");
 })
 
-
-router.post('/add', function(req, res, next) {
-  // First read existing users.
-  fs.readFile(path.join(__dirname, 'users.json'), 'utf8', function(err, data) {
-    data = JSON.parse(data);
-    data["user4"] = user["user4"];
-    console.log(data);
-    res.send(JSON.stringify(data, null, 2));
-  });
-})
-
-
-router.get('/delete', function(req, res) {
-  var id = 2;
-  // First read existing users.
-  fs.readFile(path.join(__dirname, 'users.json'), 'utf8', function(err, data) {
-    data = JSON.parse(data);
-    delete data["user" + id];
-
-    console.log(data);
-    res.send(JSON.stringify(data, null, 2));
-  });
-})
-
-router.get('/:id', function(req, res) {
-  // First read existing users.
-  fs.readFile(path.join(__dirname, 'users.json'), 'utf8', function(err, data) {
-    data = JSON.parse(data);
-    console.log(data);
-    var user = data["user" + req.params.id]
-    console.log(user);
-    res.end(JSON.stringify(user, null, 2));
-  });
-})
+router.param('userId', userController.userByID);
 
 module.exports = router;
