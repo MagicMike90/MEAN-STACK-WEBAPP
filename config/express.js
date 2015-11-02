@@ -12,6 +12,9 @@ var config = require('./config'),
   flash = require('connect-flash'),
   passport = require('passport');
 
+
+
+
 // Define the Express configuration method
 module.exports = function() {
   // Create a new Express application instance
@@ -40,7 +43,7 @@ module.exports = function() {
 
   // Set the application view engine and 'views' folder
   app.set('views', './app/views');
-  app.set('view engine', 'ejs');
+  app.set('view engine', 'jade');
 
   // Configure the flash messages middleware
   app.use(flash());
@@ -50,8 +53,10 @@ module.exports = function() {
   app.use(passport.session());
 
   // Load the routing files∫
-  app.use('/', '../app/routes/index.js')
-  app.use('/users', '../app/routes/users.js')
+  var routes = require('../app/routes/index.js');
+  var users = require('../app/routes/users.js');
+  app.use('/', routes)
+  app.use('/users', users)
 
   // Configure static file serving
   app.use(express.static('./public'));
