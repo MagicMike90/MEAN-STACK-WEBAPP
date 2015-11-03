@@ -54,9 +54,11 @@ module.exports = function() {
 
   // Load the routing files∫
   var routes = require('../app/routes/index.js');
-//  var users = require('../app/routes/users.js');
   app.use('/', routes)
-//  app.use('/users', users)
+
+  var oauth = require('../app/routes/oauth.js');
+  app.use('/oauth', oauth)
+    //app.use('/users', users)
 
   // Configure static file serving
   app.use(express.static('./public'));
