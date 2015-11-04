@@ -2,18 +2,27 @@
 'use strict';
 
 // Load the module dependencies
-var	config = require('./config'),
-	mongoose = require('mongoose');
+var config = require('./config'),
+  mongoose = require('mongoose');
 
 // Define the Mongoose configuration method
 module.exports = function() {
-	// Use Mongoose to connect to MongoDB
-	var db = mongoose.connect(config.db);
 
-	// Load the 'User' model
-	require('../app/models/user.server.model');
-	require('../app/models/article.server.model');
+  // Use Mongoose to connect to MongoDB
+  var db = mongoose.connect(config.db);
 
-	// Return the Mongoose connection instance
-	return db;
+	mongoose.connection.on('open', function(ref) {
+		console.log('Connected to mongo server.');
+	});
+	mongoose.connection.on('error', function(err) {
+		console.log('Could not connect to mongo server!');
+		console.log(err);
+	});
+  //console.log(db.connection.readyState);
+  // Load the 'User' model
+  require('../app/models/user.server.model');
+  require('../app/models/article.server.model');
+
+  // Return the Mongoose connection instance
+  return db;
 };

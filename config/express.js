@@ -9,6 +9,7 @@ var config = require('./config'),
   bodyParser = require('body-parser'),
   methodOverride = require('method-override'),
   session = require('express-session'),
+  MongoStore = require('connect-mongo')(session),
   flash = require('connect-flash'),
   passport = require('passport');
 
@@ -16,7 +17,7 @@ var config = require('./config'),
 
 
 // Define the Express configuration method
-module.exports = function() {
+module.exports = function(db) {
   // Create a new Express application instance
   var app = express();
 
@@ -35,10 +36,15 @@ module.exports = function() {
   app.use(methodOverride());
 
   // Configure the 'session' middleware
+  var mongoStore = new MongoStore({
+    db: db.connection.db
+  });
+
   app.use(session({
     saveUninitialized: true,
     resave: true,
-    secret: config.sessionSecret
+    secret: config.sessionSecret,
+    store: mongoStore
   }));
 
   // Set the application view engine and 'views' folder
