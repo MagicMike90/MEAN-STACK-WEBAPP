@@ -1,34 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:ng="http://angularjs.org">
-
 <head>
 	<!-- Use the 'title' property to render a page title  -->
-	<title>
-		<%= title %>
-	</title>
+	<title><%= title %></title>
 </head>
-
 <body>
-	<div ng-controller="ExampleController">
-		<!-- If a user is not authenticated, display the authentication links -->
-		<% if (user) { %>
-			<a href="/signout">Sign out</a>
-			<% } else { %>
-				<a href="/signup">Signup</a>
-				<a href="/signin">Signin</a>
-				<% } %>
+	<!-- Render AngularJS views  -->
+	<section ng-view></section>
 
-					<!-- Render AngularJS views  -->
-					<section ng-view></section>
+	<!-- Render the user object -->
+	<script type="text/javascript">
+		window.user = <%- user || 'null' %>;
+	</script>
 
-					<!-- Render the user object -->
-					<script type="text/javascript">
-						window.user = <%- user || 'null' %>;
-					</script>
-	</div>
 	<!-- Load local libraries -->
 	<script type="text/javascript" src="/lib/angular/angular.js"></script>
 	<script type="text/javascript" src="/lib/angular-route/angular-route.js"></script>
+	<script type="text/javascript" src="/lib/angular-resource/angular-resource.js"></script>
+
+	<!-- Load the articles module -->
+	<script type="text/javascript" src="/articles/articles.client.module.js"></script>
+	<script type="text/javascript" src="/articles/controllers/articles.client.controller.js"></script>
+	<script type="text/javascript" src="/articles/services/articles.client.service.js"></script>
+	<script type="text/javascript" src="/articles/config/articles.client.routes.js"></script>
 
 	<!-- Load the example module -->
 	<script type="text/javascript" src="/example/example.client.module.js"></script>
@@ -42,5 +36,4 @@
 	<!-- Bootstrap AngularJS application -->
 	<script type="text/javascript" src="/application.js"></script>
 </body>
-
 </html>

@@ -58,7 +58,9 @@ module.exports = function() {
 
   var oauth = require('../app/routes/oauth.js');
   app.use('/oauth', oauth)
-    //app.use('/users', users)
+
+  var article = require('../app/routes/articles.js')
+  app.use('/api', article)
 
   // Configure static file serving
   app.use(express.static('./public'));
