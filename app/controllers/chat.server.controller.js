@@ -4,7 +4,7 @@
 // Create the chat configuration
 module.exports = function(io, socket) {
   // Emit the status event when a new socket client is connected
-  console.log(socket.request);
+  //console.log(socket.request);
   io.emit('chatMessage', {
     type: 'status',
     text: 'connected',
