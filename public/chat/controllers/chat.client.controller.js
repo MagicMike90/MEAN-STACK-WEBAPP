@@ -9,6 +9,7 @@ angular.module('chat').controller('ChatController', ['$scope', 'Socket',
 
     // Add an event listener to the 'chatMessage' event
     Socket.on('chatMessage', function(message) {
+      //console.log(message);
       $scope.messages.push(message);
     });
 
@@ -30,6 +31,5 @@ angular.module('chat').controller('ChatController', ['$scope', 'Socket',
     $scope.$on('$destroy', function() {
       Socket.removeListener('chatMessage');
     })
-
   }
 ]);

@@ -12,14 +12,27 @@ var config = require('./config'),
   MongoStore = require('connect-mongo')(session),
   flash = require('connect-flash'),
   passport = require('passport');
-
-
+var socketio = require('socket.io');
+var http = require('http');
 
 
 // Define the Express configuration method
 module.exports = function(db) {
   // Create a new Express application instance
   var app = express();
+
+  // Create a new HTTP server
+  var server = http.createServer(app);
+
+  // Create a new Socket.io server
+  var io = socketio.listen(server);
+
+  // io.on('connection', function (socket) {
+  //   socket.emit('news', { hello: 'world' });
+  //   socket.on('my other event', function (data) {
+  //     console.log(data);
+  //   });
+  // });
 
   // Use the 'NDOE_ENV' variable to activate the 'morgan' logger or 'compress' middleware
   if (process.env.NODE_ENV === 'development') {
@@ -36,10 +49,13 @@ module.exports = function(db) {
   app.use(methodOverride());
 
   // Configure the 'session' middleware
+  // console.log(conn);
+  // var mongoStore = new MongoStore({
+  //   mongooseConnection: conn
+  // });
   var mongoStore = new MongoStore({
     db: db.connection.db
   });
-
   app.use(session({
     saveUninitialized: true,
     resave: true,
@@ -71,6 +87,9 @@ module.exports = function(db) {
   // Configure static file serving
   app.use(express.static('./public'));
 
+  // Load the Socket.io configuration
+  require('./socketio')(server, io, mongoStore);
+
   // Return the Express application instance
-  return app;
+  return server;
 };

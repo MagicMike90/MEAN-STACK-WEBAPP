@@ -8,6 +8,8 @@ var config = require('./config'),
 
 // Define the Socket.io configuration method
 module.exports = function(server, io, mongoStore) {
+  console.log("try");
+
   // Intercept Socket.io's handshake request
   io.use(function(socket, next) {
     // Use the 'cookie-parser' module to parse the request cookies
@@ -25,6 +27,7 @@ module.exports = function(server, io, mongoStore) {
           passport.session()(socket.request, {}, function() {
             if (socket.request.user) {
               next(null, true);
+                //console.log("next");
             } else {
               next(new Error('User is not authenticated'), false);
             }
@@ -36,6 +39,7 @@ module.exports = function(server, io, mongoStore) {
 
   // Add an event listener to the 'connection' event
   io.on('connection', function(socket) {
+    console.log("connencted");
     // Load the chat controller
     require('../app/controllers/chat.server.controller')(io, socket);
   });
